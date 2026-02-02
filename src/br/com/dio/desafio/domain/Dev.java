@@ -2,6 +2,7 @@ package br.com.dio.desafio.domain;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class Dev {
@@ -10,9 +11,29 @@ public class Dev {
     private Set<Content> contentsSubscribed = new LinkedHashSet<>();
     private Set<Content> contentsConcluded = new LinkedHashSet<>();
 
-    public void subscribeContent(Bootcamp bootcamp){}
-    public void progress(){}
-    public void calcTotalXp(){}
+    public void subscribeContent(Bootcamp bootcamp){
+        this.contentsSubscribed.addAll(bootcamp.getContents());
+        bootcamp.getSubscribedDevs().add(this);
+    }
+
+    public void progress(){
+        Optional<Content> content = this.contentsSubscribed.stream().findFirst();
+
+        if(content.isPresent()){
+            this.contentsConcluded.add(content.get());
+            this.contentsSubscribed.remove(content.get());
+        }else{
+            System.out.println("Erro ao progredir dev.");
+        }
+
+    }
+
+    public double calcTotalXp(){
+        return this.contentsSubscribed
+                .stream()
+                .mapToDouble(content -> content.calcXp())
+                .sum();
+    }
 
     public String getName() {
         return name;
