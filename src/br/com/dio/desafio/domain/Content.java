@@ -30,4 +30,12 @@ public abstract class Content {
     }
 
     public abstract double calcXp();
+
+    @Override
+    public String toString() {
+        return "Content{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
